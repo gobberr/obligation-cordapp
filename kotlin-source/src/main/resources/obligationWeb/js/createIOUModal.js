@@ -15,7 +15,8 @@ angular.module('demoAppModule').controller('CreateIOUModalCtrl', function($http,
             createIOUModal.formError = false;
 
             const amount = createIOUModal.form.amount;
-            const currency = createIOUModal.form.currency;
+            //const currency = createIOUModal.form.currency;
+            const currency = "EUR";
             const party = createIOUModal.form.counterparty;
 
             $uibModalInstance.close();

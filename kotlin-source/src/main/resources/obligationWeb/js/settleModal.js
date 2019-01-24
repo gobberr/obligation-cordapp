@@ -16,7 +16,8 @@ angular.module('demoAppModule').controller('SettleModalCtrl', function($http, $u
 
             const id = settleModal.id;
             const amount = settleModal.form.amount;
-            const currency = settleModal.form.currency;
+            //const currency = settleModal.form.currency;
+            const currency = "EUR";
 
             $uibModalInstance.close();
 
@@ -47,7 +48,7 @@ angular.module('demoAppModule').controller('SettleModalCtrl', function($http, $u
     settleModal.cancel = () => $uibModalInstance.dismiss();
 
     function invalidFormInput() {
-        return isNaN(settleModal.form.amount) || (settleModal.form.currency.length != 3);
+        return isNaN(settleModal.form.amount) /*|| (settleModal.form.currency.length != 3)*/;
     }
 });
 

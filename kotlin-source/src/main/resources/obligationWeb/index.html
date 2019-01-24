@@ -30,9 +30,9 @@
             <a class="navbar-brand" href="#">{{demoApp.thisNode}}</a>
         </div>
         <button ng-click="demoApp.openCreateIOUModal()" type="button" class="btn btn-primary navbar-btn">Create IOU</button>
-        <button ng-click="demoApp.openIssueCashModal()" type="button" class="btn btn-primary navbar-btn">Issue cash</button>
-        <button ng-click="demoApp.refresh()" type="button" class="btn btn-default navbar-btn"><span
-                class="glyphicon glyphicon-refresh"></span></button>
+        <button ng-click="demoApp.openIssueCashModal()" type="button" class="btn btn-primary navbar-btn">Add cash</button>
+        <!--<button ng-click="demoApp.refresh()" type="button" class="btn btn-default navbar-btn"><span
+                class="glyphicon glyphicon-refresh"></span></button>-->
     </div>
 </nav>
 
@@ -48,10 +48,12 @@
                         ng-options="peer as peer for peer in createIOUModal.peers">
                 </select>
             </div>
+            <!--
             <div class="form-group">
                 <label for="createIOUCurrency" class="control-label">Currency (ISO code):</label>
                 <input type="text" ng-model="createIOUModal.form.currency" class="form-control" id="createIOUCurrency">
             </div>
+            -->
             <div class="form-group">
                 <label for="createIOUAmount" class="control-label">Amount (Int):</label>
                 <input type="text" ng-model="createIOUModal.form.amount" class="form-control" id="createIOUAmount">
@@ -83,10 +85,12 @@
     </div>
     <form>
         <div class="modal-body">
+            <!--
             <div class="form-group">
-                <label for="issueCashCurrency" class="control-label">Currency (ISO code):</label>
+                <label for="issueCashCurrency" class="control-label">Currency (EUR):</label>
                 <input type="text" ng-model="issueCashModal.form.currency" class="form-control" id="issueCashCurrency">
             </div>
+            -->
             <div class="form-group">
                 <label for="issueCashAmount" class="control-label">Amount (Int):</label>
                 <input type="text" ng-model="issueCashModal.form.amount" class="form-control" id="issueCashAmount">
@@ -101,7 +105,7 @@
         </div>
         <div class="modal-footer">
             <button ng-click="issueCashModal.cancel()" type="button" class="btn btn-default">Close</button>
-            <button ng-click="issueCashModal.issue()" type="button" class="btn btn-primary">Issue cash</button>
+            <button ng-click="issueCashModal.issue()" type="button" class="btn btn-primary">Add cash</button>
         </div>
     </form>
 </script>
@@ -151,10 +155,12 @@
     </div>
     <form>
         <div class="modal-body">
+            <!--
             <div class="form-group">
                 <label for="settleCurrency" class="control-label">Currency (ISO code):</label>
                 <input type="text" ng-model="settleModal.form.currency" class="form-control" id="settleCurrency">
             </div>
+            -->
             <div class="form-group">
                 <label for="settleAmount" class="control-label">Amount (Int):</label>
                 <input type="text" ng-model="settleModal.form.amount" class="form-control" id="settleAmount">
@@ -169,7 +175,7 @@
         </div>
         <div class="modal-footer">
             <button ng-click="settleModal.cancel()" type="button" class="btn btn-default">Close</button>
-            <button ng-click="settleModal.settle()" type="button" class="btn btn-primary">Settle</button>
+            <button ng-click="settleModal.settle()" type="button" class="btn btn-primary">Pay</button>
         </div>
     </form>
 </script>
@@ -213,7 +219,7 @@
             <div class="panel-heading">
                 <h3 class="panel-title">There are no recorded IOUs</h3>
             </div>
-            <div class="panel-body">Use the "Create IOU" button to send an IOU to a peer.</div>
+            <!--<div class="panel-body">Use the "Create IOU" button to send an IOU to a peer.</div>-->
         </div>
         <div ng-show="demoApp.ious.length" class="panel panel-primary">
             <div class="panel-heading">
@@ -223,7 +229,7 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>From</th>
+                        <!--<th>From</th>-->
                         <th>To</th>
                         <th>Amount</th>
                         <th>Paid</th>
@@ -232,7 +238,7 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="iou in demoApp.ious">
-                        <td class="vert-align">{{iou.lender.substring(0, 10)}}</td>
+                        <!--<td class="vert-align">{{iou.lender.substring(0, 10)}}</td>-->
                         <td class="vert-align">{{iou.borrower.substring(0, 10)}}</td>
                         <td class="vert-align">{{iou.amount}}</td>
                         <td class="vert-align">{{iou.paid}}</td>
@@ -240,7 +246,7 @@
                             <div class="btn-group" role="group">
                                 <button ng-click="demoApp.openTransferModal(iou.linearId.id)" type="button" class="btn btn-primary">Transfer
                                 </button>
-                                <button ng-click="demoApp.openSettleModal(iou.linearId.id)" type="button" class="btn btn-primary">Settle
+                                <button ng-click="demoApp.openSettleModal(iou.linearId.id)" type="button" class="btn btn-primary">Pay
                                 </button>
                             </div>
                         </td>

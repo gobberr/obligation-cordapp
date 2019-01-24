@@ -14,13 +14,14 @@ angular.module('demoAppModule').controller('IssueCashModalCtrl', function($http,
             issueCashModal.formError = false;
 
             const amount = issueCashModal.form.amount;
-            const currency = issueCashModal.form.currency;
+            //const currency = issueCashModal.form.currency;
+            const currency = "EUR";
 
             $uibModalInstance.close();
 
             const issueCashEndpoint =
                 apiBaseURL +
-                `self-issue-cash?amount=${amount}&currency=${currency}`;
+                'self-issue-cash?amount=${amount}&currency=${currency}';
 
             $http.get(issueCashEndpoint).then(
                 (result) => {console.log(result.toString()); issueCashModal.displayMessage(result); },
@@ -45,7 +46,8 @@ angular.module('demoAppModule').controller('IssueCashModalCtrl', function($http,
     issueCashModal.cancel = () => $uibModalInstance.dismiss();
 
     function invalidFormInput() {
-        return isNaN(issueCashModal.form.amount) || (issueCashModal.form.currency.length != 3);
+        return isNaN(issueCashModal.form.amount) /*|| (issueCashModal.form.currency.length != 3)*/;
+        //return false;
     }
 });
 
