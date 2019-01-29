@@ -74,3 +74,6 @@ docs/virtualenv/
 
 java-source/out/
 kotlin-source/out/
+\.idea/
+
+gradle/
