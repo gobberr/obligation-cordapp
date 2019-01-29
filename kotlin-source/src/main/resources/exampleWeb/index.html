@@ -1,0 +1,207 @@
+<!--
+--------
+WARNING:
+--------
+
+THIS CODE IS ONLY MADE AVAILABLE FOR DEMONSTRATION PURPOSES AND IS NOT SECURE! DO NOT USE IN PRODUCTION!
+
+FOR SECURITY REASONS, USING A JAVASCRIPT WEB APP HOSTED VIA THE CORDA NODE IS NOT THE RECOMMENDED WAY TO INTERFACE
+WITH CORDA NODES! HOWEVER, FOR THIS PRE-ALPHA RELEASE IT'S A USEFUL WAY TO EXPERIMENT WITH THE PLATFORM AS IT ALLOWS
+YOU TO QUICKLY BUILD A UI FOR DEMONSTRATION PURPOSES.
+
+GOING FORWARD WE RECOMMEND IMPLEMENTING A STANDALONE WEB SERVER THAT AUTHORISES VIA THE NODE'S RPC INTERFACE. IN THE
+COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Commercial paper - CorDapp</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/style.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/bootstrap-theme.min.css" crossorigin="anonymous">
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="assets/js/angular.min.js"></script>
+    <script src="assets/js/ui-bootstrap-tpls.min.js"></script>
+    <script src="assets/js/ng-loading-overlay.min.js"></script>
+    <script src="js/angular-module.js"></script>
+</head>
+
+<body ng-app="auctionAppModule" ng-controller="AuctionAppController as demoApp">
+
+    <!-- Sell Listing Start -->
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">{{demoApp.thisNode}}</a>
+                </div>
+                <button ng-click="demoApp.openModal()" type="button" class="btn btn-primary navbar-btn pull-right">Add commercial paper:</button>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <!-- Sell Listing Ends -->
+
+
+    <!-- Sell Listing Start -->
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="panel-group" id="accordion">
+                <div class="panel">
+                    <div class="panel-primary">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">Commercial papers:</h4>
+                        </div>
+                    </div>
+                    <div>
+                        <div ng-repeat="auction in demoApp.auctions" class="panel panel-default">
+                             <div class="panel-body panel-border">
+                                <div class="auctionId">
+                                    <h4>Commercial paper ID - {{auction.linearId.id}}</h4>
+                                </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-xs-7">
+                                            <table class="table table-bordered">
+                                                <tr>
+                                                    <th>Paper Name</th>
+                                                    <td>{{auction.itemName}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Paper description</th>
+                                                    <td>{{auction.itemDescription}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Maturity date</th>
+                                                    <td>{{auction.expiryDate}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Paper price</th>
+                                                    <td>{{auction.startPrice}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Owner</th>
+                                                    <td>
+                                                        <span ng-if="auction.auctionWinner==null">
+                                                            -
+                                                        </span>
+                                                        <span ng-if="auction.auctionWinner!=null">
+                                                            {{auction.auctionWinner}}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="col-xs-5">
+                                            <button ng-if="(auction.auctionActive==true && auction.itemOwner!==demoApp.thisNode)" ng-click="demoApp.openBidModal(auction.linearId.id)" type="button" class="btn btn-primary">Buy paper</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <!-- Sell Listing Ends -->
+
+
+    <!-- Create Sell Content Start -->
+    <script type="text/ng-template" id="createAuctionModal.html">
+        <div class="modal-header">
+            <h4 class="modal-title">Add new paper</h4>
+        </div>
+        <form>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="itemName" class="control-label">Paper name:</label>
+                    <input type="text" ng-model="modalInstance.form.itemName" class="form-control" id="itemName">
+                </div>
+
+                <div class="form-group">
+                    <label for="itemDescription" class="control-label">Paper description:</label>
+                    <input type="text" ng-model="modalInstance.form.itemDescription" class="form-control" id="itemDescription">
+                </div>
+
+                <div class="form-group">
+                    <label for="startPrice" class="control-label">Paper selling price (Int):</label>
+                    <input type="text" ng-model="modalInstance.form.startPrice" class="form-control" id="startPrice">
+                </div>
+                <div class="form-group">
+                    <label for="expiryDate" class="control-label">Maturity date (ad es 2019-12-31T00:00:00Z)</label>
+                    <input type="text" ng-model="modalInstance.form.expiryDate" class="form-control" id="expiryDate">
+                </div>
+                <div ng-show="modalInstance.formError" class="form-group">
+                    <div class="alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span> Enter valid Paper parameters
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button ng-click="modalInstance.cancel()" type="button" class="btn btn-default">Close</button>
+                <button ng-click="modalInstance.create()" type="button" class="btn btn-primary">Add new paper</button>
+            </div>
+        </form>
+    </script>
+    <!-- Create Sell Content End -->
+
+    <!-- Purchase Content Start -->
+    <script type="text/ng-template" id="BidModal.html">
+        <div class="modal-header">
+            <h4 class="modal-title">Bid Model</h4>
+        </div>
+        <form>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="amount" class="control-label">Amount (Int):</label>
+                    <input type="text" ng-model="modalInstance.form.amount" class="form-control" id="amount">
+                </div>
+                <div ng-show="modalInstance.formError" class="form-group">
+                    <div class="alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                        <span class="sr-only">Error:</span> Enter valid buy parameters
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button ng-click="modalInstance.cancel()" type="button" class="btn btn-default">Close</button>
+                <button ng-click="modalInstance.create()" type="button" class="btn btn-primary">Buy this commercial Paper</button>
+            </div>
+        </form>
+    </script>
+    <!-- Purchase Content End -->
+
+    <!-- Purchase Content Start -->
+    <script type="text/ng-template" id="closeAuctionModal.html">
+        <div class="modal-header">
+            <h4 class="modal-title">Are you sure?</h4>
+        </div>
+        <form>
+            <div class="modal-footer">
+                <button ng-click="modalInstance.cancel()" type="button" class="btn btn-default">No</button>
+                <button ng-click="modalInstance.create()" type="button" class="btn btn-primary">Yes</button>
+            </div>
+        </form>
+    </script>
+    <!-- Purchase Content End -->
+
+    <!-- Message Content Start -->
+    <script type="text/ng-template" id="messageContent.html">
+        <div class="modal-body" id="modal-body">
+            {{ modalInstanceTwo.message }}
+        </div>
+    </script>
+    <!-- Message Content End -->
+
+</body>
+
+</html>
